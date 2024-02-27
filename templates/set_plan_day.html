@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Author:Fenglin Yu -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <title>生日聚会计划便签</title>
+    <!-- Author:Fenglin Yu -->
 </head>
 <body>
+    <!-- Author:Fenglin Yu -->
     <h1>选择一个合适的时间开始计划～</h1>
     <div id="birthdayInfo" class="birthdayinfo"></div>
     <div class="textword">
@@ -13,8 +16,10 @@
     <div class="numberpicker">
         <input type="number" id="planpreday" oninput="calculatePlanDate()">
     </div>
+    <!-- Author:Fenglin Yu -->
 
     <script>
+        // Author:Fenglin Yu
         var birthdate = new Date(localStorage.getItem('birthdate'));
         var today = new Date(localStorage.getItem('today'));
         var nextBirthday = new Date(localStorage.getItem('nextbirthdate'));
@@ -30,6 +35,7 @@
             var planpreday = parseInt(document.getElementById('planpreday').value);
             var planDate = new Date(nextBirthday.getTime() - planpreday * 24 * 60 * 60 * 1000);
         }
+        // Author:Fenglin Yu
     </script>
 </body>
 </html>
