@@ -6,10 +6,9 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-@app.route('/continue', methods=['POST'])
+@app.route('/basicinfo')
 def input_info():
-    
-    return '用户按下了任意键，继续游戏'
+    return render_template('basic_info.html')
 
 if __name__ == '__main__':
     app.run()

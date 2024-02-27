@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <title>生日聚会计划便签</title>
+    <style>
+        input {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body onclick="goToNextPage()">
+    <h1>要输入出生日期和今天的日期哦</h1>
+    <div class="basicinfo">
+        <div class="inferword">
+            <label for="currentDate">今天日期</label>
+        </div>
+        <div class="datepicker">
+            <input type="date" id="currentDate">
+        </div>
+        <br>
+        <div class="inferword">
+            <label for="birthdate">出生日期</label>
+        </div>
+        <div class="datepicker">
+            <input type="date" id="birthdate">
+        </div>
+        <br>
+    </div>
+
+    <script>
+        function goToNextPage() {
+            var birthdate = new Date(document.getElementById('birthdate').value);
+            var today = new Date(document.getElementById('currentDate').value);
+            var nextBirthday = new Date(today.getFullYear(), birthdate.getMonth(), birthdate.getDate());
+            if (nextBirthday < today) {
+                nextBirthday.setFullYear(today.getFullYear() + 1);
+            }
+            var daysUntilBirthday = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
+            if (isNaN(daysUntilBirthday)) {
+                alert("日期没有选好哦～");
+            } else {
+                alert("距离下次生日还有 " + daysUntilBirthday + " 天");
+                window.location.href = "下一个页面的URL";
+            }
+        }
+        document.getElementById('birthdate').addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+
+        document.getElementById('currentDate').addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+    </script>
+</body>
+</html>

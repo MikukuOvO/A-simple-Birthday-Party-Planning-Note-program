@@ -14,15 +14,47 @@ form {
 input[type="submit"] {
     background-color: rgb(243, 181, 67);
     color: white;
-    padding: 10px 20px;
+    border-radius: 30%;
+    padding: 15px 25px;
     border: none;
     cursor: pointer;
+    margin-top: 40px;
 }
 
-blessing {
+button {
+    background-color: rgb(243, 181, 67);
+    color: white;
+    border-radius: 30%;
+    padding: 15px 25px;
+    border: none;
+    cursor: pointer;
+    margin-top: 40px;
+    margin-left: 105px;
+}
+
+.blessing {
     text-align: left;
-    margin: 20px;
     font-style: italic;
     font-size: 18px;
-    line-height: 1.5;
+    margin-left: 100px;
+    line-height: 2.2;
+}
+
+.basicinfo {
+    text-align: left;
+    font-size: 30px;
+    margin-left: 150px;
+    line-height: 3.0;
+}
+
+.datepicker {
+    display: inline-block;
+    position: relative;
+    margin-left: 60px;
+}
+.datepicker input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }

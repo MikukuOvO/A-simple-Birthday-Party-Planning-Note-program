@@ -4,16 +4,22 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <title>生日聚会计划便签</title>
 </head>
-<body>
+<body onclick="goToNextPage()">
     <h1>来筹办一场生日聚会趴~</h1>
-    <form action="/continue" method="post">
-        <input type="submit" value="开始安排">
-    </form>
     <div class="blessing">
         <p>生日，</p>
         <p>是很多人一年中最重要的一个节日，</p>
         <p>有亲朋好友在身边，</p>
-        <p>有亲朋好友在身边，</p>
+        <p>一起庆祝，</p>
+        <p>一起度过一个难忘的生日，</p>
+        <p>是一件无比幸福的事情～</p>
+        <p>从现在开始，</p>
+        <p>计划筹办下一次的生日吧！</p>
     </div>
+    <script>
+        function goToNextPage() {
+            window.location.href = "basicinfo";
+        }
+    </script>
 </body>
 </html>
