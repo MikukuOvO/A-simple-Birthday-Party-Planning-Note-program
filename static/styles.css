@@ -1,0 +1,28 @@
+body {
+    background-image: url('/static/img/background.jpg');
+    background-size: 100% auto;
+}
+h1 {
+    color: rgb(75, 106, 243);
+    text-align: center;
+}
+
+form {
+    text-align: center;
+}
+
+input[type="submit"] {
+    background-color: rgb(243, 181, 67);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+blessing {
+    text-align: left;
+    margin: 20px;
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.5;
+}
