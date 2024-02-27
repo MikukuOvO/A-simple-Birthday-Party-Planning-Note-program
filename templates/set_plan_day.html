@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <title>生日聚会计划便签</title>
+</head>
+<body>
+    <h1>选择一个合适的时间开始计划～</h1>
+    <script>
+        var birthdate = new Date(localStorage.getItem('birthdate'));
+        var today = new Date(localStorage.getItem('today'));
+        console.log("出生日期:", birthdate);
+        console.log("今天日期:", today);
+        // 用这两个变量继续完成内容
+    </script>
+</body>
+</html>

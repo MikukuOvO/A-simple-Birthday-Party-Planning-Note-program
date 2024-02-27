@@ -40,8 +40,10 @@
             if (isNaN(daysUntilBirthday)) {
                 alert("日期没有选好哦～");
             } else {
+                localStorage.setItem('birthdate', birthdate.toISOString());
+                localStorage.setItem('today', today.toISOString());
                 alert("距离下次生日还有 " + daysUntilBirthday + " 天");
-                window.location.href = "下一个页面的URL";
+                window.location.href = "setplanday";
             }
         }
         document.getElementById('birthdate').addEventListener('click', function(event) {
