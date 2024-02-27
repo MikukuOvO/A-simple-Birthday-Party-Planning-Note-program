@@ -6,12 +6,30 @@
 </head>
 <body>
     <h1>选择一个合适的时间开始计划～</h1>
+    <div id="birthdayInfo" class="birthdayinfo"></div>
+    <div class="textword">
+        想要提前多少天做计划呢？
+    </div>
+    <div class="numberpicker">
+        <input type="number" id="planpreday" oninput="calculatePlanDate()">
+    </div>
+
     <script>
         var birthdate = new Date(localStorage.getItem('birthdate'));
         var today = new Date(localStorage.getItem('today'));
-        console.log("出生日期:", birthdate);
-        console.log("今天日期:", today);
-        // 用这两个变量继续完成内容
+        var nextBirthday = new Date(localStorage.getItem('nextbirthdate'));
+
+        var daysUntilNextBirthday = Math.ceil((nextBirthday.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+
+        var birthdayInfoDiv = document.getElementById("birthdayInfo");
+        birthdayInfoDiv.innerHTML = "下次生日日期: " + nextBirthday.toDateString() + "<br>距离今天的天数: " + daysUntilNextBirthday + "天";
+
+        var planpreday = new Number(document.getElementById('planpreday').value);
+
+        function calculatePlanDate() {
+            var planpreday = parseInt(document.getElementById('planpreday').value);
+            var planDate = new Date(nextBirthday.getTime() - planpreday * 24 * 60 * 60 * 1000);
+        }
     </script>
 </body>
 </html>

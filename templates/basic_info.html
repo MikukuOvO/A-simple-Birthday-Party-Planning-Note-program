@@ -42,7 +42,7 @@
             } else {
                 localStorage.setItem('birthdate', birthdate.toISOString());
                 localStorage.setItem('today', today.toISOString());
-                alert("距离下次生日还有 " + daysUntilBirthday + " 天");
+                localStorage.setItem('nextbirthdate', nextBirthday.toISOString());
                 window.location.href = "setplanday";
             }
         }

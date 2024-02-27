@@ -52,9 +52,38 @@ button {
     position: relative;
     margin-left: 60px;
 }
+
 .datepicker input {
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 5px;
+}
+
+.birthdayinfo {
+    text-align: left;
+    font-size: 24px;
+    margin-left: 150px;
+    line-height: 3.0;
+}
+
+.numberpicker {
+    display: inline-block;
+    position: relative;
+    margin-top: 15px;
+    margin-left: 170px;
+}
+
+.numberpicker input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.textword {
+    text-align: left;
+    font-size: 24px;
+    margin-left: 150px;
+    line-height: 3.0;
 }
