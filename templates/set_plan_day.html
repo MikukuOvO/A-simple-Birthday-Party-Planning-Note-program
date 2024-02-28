@@ -33,7 +33,7 @@
     <div id="outputDiv" class="birthdayinfo"></div>
     <div id="planDateValue1" class="birthdayinfo"></div>
     <div id="planDateValue2" class="birthdayinfo"></div>
-    <button onclick="confirmIt()">我确认！</button>
+    <button id="confirmIt" style="display: none;" onclick="confirmIt()">我确认！</button>
     <!-- Author:Fenglin Yu -->
 
     <script>
@@ -53,8 +53,6 @@
             var outputDiv = document.getElementById('outputDiv');
             outputDiv.innerHTML = '计划日期是：' + planDate.toDateString();
             window.planDate = planDate;
-            // 为了保持错误图片的显示状态，你可以在这里再次调用checkDate，或者根据需要移除或保留这行代码
-            // checkDate(); // 如果你希望在每次输入变化时都检查日期，则取消注释这行代码
         }
 
         function checkDate() {
@@ -78,7 +76,8 @@
             } else {
                 document.querySelector('.error-image').style.display = 'none';
                 document.getElementById('planDateValue2').innerText = '您选择的是这个日期呐：' + planDate.toDateString() + ' ，您确认嘛～';
-            }   
+            }
+            document.getElementById("confirmIt").style.display = "block";
         }
 
         function confirmIt() {

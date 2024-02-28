@@ -11,9 +11,9 @@
     <script>
         var daysPrepareNextBirthday = new Date(localStorage.getItem('daysPrepareNextBirthday'));
         var birthdayInfoDiv = document.getElementById("birthdayInfo2");
-        birthdayInfoDiv.innerHTML = "<br>预计准备生日计划的日期: " + daysPrepareNextBirthday + "<br><br><br><br><br><br>按任意键结束 " ;
+        birthdayInfoDiv.innerHTML = "<br>预计准备生日计划的日期: " + daysPrepareNextBirthday.toDateString() + "<br><br><br><br><br><br>按任意键结束 " ;
         function goToNextPage() {
-            window.close();
+            window.location.href = "closepage";
         }
     </script>
 </body>

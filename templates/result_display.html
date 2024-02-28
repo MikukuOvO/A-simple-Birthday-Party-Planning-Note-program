@@ -20,7 +20,7 @@
         var daystoPrepareNextBirthday = new Date(localStorage.getItem('dayst0PrepareNextBirthday'));
         var daysPrepareNextBirthday = new Date(localStorage.getItem('daysPrepareNextBirthday'));
         var birthdayInfoDiv = document.getElementById("birthdayInfo1");
-        birthdayInfoDiv.innerHTML = "下次生日日期: " + nextBirthday.toDateString() + "<br>下次生日距离今天的天数: " + daysUntilNextBirthday + "天" + "<br>距离下次生日前 " + n + " 天的日期: " + daystoPrepareNextBirthday.toDateString()+ "<br>预计准备生日计划的日期: " + daysPrepareNextBirthday.toDateString() + "<br>要重新确定计划日期吗？: " ;
+        birthdayInfoDiv.innerHTML = "下次生日日期: " + nextBirthday.toDateString() + "<br>下次生日距离今天的天数: " + daysUntilNextBirthday + "天" + "<br>距离下次生日前 " + n + " 天的日期: " + daystoPrepareNextBirthday.toDateString()+ "<br>预计准备生日计划的日期: " + daysPrepareNextBirthday.toDateString() + "<br>要重新确定计划日期吗？" ;
         
         function Final() {
             window.location.href = "endpage";

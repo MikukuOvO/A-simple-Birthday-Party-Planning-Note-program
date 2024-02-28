@@ -22,5 +22,9 @@ def result_display():
 def endpage():
     return render_template('endpage.html')
 
+@app.route('/closepage')
+def closepage():
+    return render_template('closepage.html')
+
 if __name__ == '__main__':
     app.run()
