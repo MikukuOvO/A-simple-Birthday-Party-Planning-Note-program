@@ -14,5 +14,13 @@ def input_info():
 def set_plan_day():
     return render_template('set_plan_day.html')
 
+@app.route('/resultdisplay')
+def result_display():
+    return render_template('result_display.html')
+
+@app.route('/endpage')
+def endpage():
+    return render_template('endpage.html')
+
 if __name__ == '__main__':
     app.run()

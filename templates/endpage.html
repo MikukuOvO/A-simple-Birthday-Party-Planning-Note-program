@@ -1,0 +1,21 @@
+<!-- Author:Zixuan Lu -->
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <title>生日聚会计划便签</title>
+</head>
+<body onclick="goToNextPage()">
+    <h1>祝你有个快乐的生日~</h1>
+    <div id="birthdayInfo2" class="birthdayinfo"></div>
+    <script>
+        var daysPrepareNextBirthday = new Date(localStorage.getItem('daysPrepareNextBirthday'));
+        var birthdayInfoDiv = document.getElementById("birthdayInfo2");
+        birthdayInfoDiv.innerHTML = "<br>预计准备生日计划的日期: " + daysPrepareNextBirthday + "<br><br><br><br><br><br>按任意键结束 " ;
+        function goToNextPage() {
+            window.close();
+        }
+    </script>
+</body>
+</html>
+<!-- Author:Zixuan Lu -->

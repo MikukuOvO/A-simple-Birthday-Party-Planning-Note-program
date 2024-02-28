@@ -4,11 +4,24 @@
     <!-- Author:Fenglin Yu -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <title>生日聚会计划便签</title>
+    <style>
+        .error-image {
+            display: none;
+            width: 100px;
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 1000;
+        }
+    </style>
     <!-- Author:Fenglin Yu -->
 </head>
 <body>
     <!-- Author:Fenglin Yu -->
     <h1>选择一个合适的时间开始计划～</h1>
+    <div class="error-container">
+        <img src="static/img/nowork.jpg" class="error-image" alt="错误提示">
+    </div>
     <div id="birthdayInfo" class="birthdayinfo"></div>
     <div class="textword">
         想要提前多少天做计划呢？
@@ -16,6 +29,11 @@
     <div class="numberpicker">
         <input type="number" id="planpreday" oninput="calculatePlanDate()">
     </div>
+    <button onclick="checkDate()">就这样哩～</button>
+    <div id="outputDiv" class="birthdayinfo"></div>
+    <div id="planDateValue1" class="birthdayinfo"></div>
+    <div id="planDateValue2" class="birthdayinfo"></div>
+    <button onclick="confirmIt()">我确认！</button>
     <!-- Author:Fenglin Yu -->
 
     <script>
@@ -29,12 +47,46 @@
         var birthdayInfoDiv = document.getElementById("birthdayInfo");
         birthdayInfoDiv.innerHTML = "下次生日日期: " + nextBirthday.toDateString() + "<br>距离今天的天数: " + daysUntilNextBirthday + "天";
 
-        var planpreday = new Number(document.getElementById('planpreday').value);
-
         function calculatePlanDate() {
             var planpreday = parseInt(document.getElementById('planpreday').value);
             var planDate = new Date(nextBirthday.getTime() - planpreday * 24 * 60 * 60 * 1000);
+            var outputDiv = document.getElementById('outputDiv');
+            outputDiv.innerHTML = '计划日期是：' + planDate.toDateString();
+            window.planDate = planDate;
+            // 为了保持错误图片的显示状态，你可以在这里再次调用checkDate，或者根据需要移除或保留这行代码
+            // checkDate(); // 如果你希望在每次输入变化时都检查日期，则取消注释这行代码
         }
+
+        function checkDate() {
+            document.getElementById('planDateValue1').innerText = '';
+            document.getElementById('planDateValue2').innerText = '';
+            var planDate = window.planDate;
+            var planpreday = parseInt(document.getElementById('planpreday').value);
+            console.log(planpreday)
+            localStorage.setItem('n', planpreday);
+            localStorage.setItem('dayst0PrepareNextBirthday', planDate.toISOString());
+            if (planDate && planDate.getDay() !== 0 && planDate.getDay() !== 6) {
+                document.querySelector('.error-image').style.display = 'block';
+                if(planDate.getDay() < 3) {
+                    planDate.setDate(planDate.getDate() - planDate.getDay() - 1)
+                }
+                else {
+                    planDate.setDate(planDate.getDate() - planDate.getDay() + 6)
+                }
+                document.getElementById('planDateValue1').innerText = '这可是工作日，是要上班的呐～ '
+                document.getElementById('planDateValue2').innerText = '这边帮您改成最近的周六啦：' + planDate.toDateString() + ' ，您看可以嘛～';
+            } else {
+                document.querySelector('.error-image').style.display = 'none';
+                document.getElementById('planDateValue2').innerText = '您选择的是这个日期呐：' + planDate.toDateString() + ' ，您确认嘛～';
+            }   
+        }
+
+        function confirmIt() {
+            localStorage.setItem('daysPrepareNextBirthday', planDate.toISOString());
+            document.querySelector('.error-image').style.display = 'none';
+            window.location.href = "resultdisplay";
+        }
+        
         // Author:Fenglin Yu
     </script>
 </body>
