@@ -5,37 +5,83 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <title>生日聚会计划便签</title>
     <style>
-        input {
-            margin-bottom: 10px;
+        input, button {
+            padding: 10px;
+            margin: 5px 0;
+            display: block;
+            width: calc(100% - 22px);
+            box-sizing: border-box;
+        }
+        button {
+            cursor: pointer;
+            font-size: 16px;
+            background-color: rgb(243, 181, 67);
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #f2f2f2; /* 设置表格背景底色 */
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:hover {
+            background-color: #ddd; /* 鼠标悬停时行的背景色 */
+        }
+        /* 可选：为表头（th）设置不同的背景色增强区分度 */
+        th {
+            background-color: rgb(243, 181, 67);
+            color: white;
+        }
+        .plan-btn {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        /* 选中状态的按钮样式 */
+        .selected {
+            background-color: #f44336;
         }
     </style>
 </head>
 <body onclick="goToNextPage()">
     <h1>制定生日聚会计划的日期</h1>
+    <table id="itemsTable" onclick="event.stopPropagation()">
+        <thead>
+            <tr>
+                <th>姓名</th>
+                <th>关系</th>
+                <th>生日</th> <!-- 新增表头 -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 数据行将在这里通过JavaScript动态添加 -->
+        </tbody>
+    </table>
     <div class="basicinfo">
+        <div id="selectedUserName">选中的用户: 无</div>
         <div class="inferword">
             <label for="currentDate">今天日期</label>
         </div>
-        <div class="datepicker">
+        <div class="datepicker" onclick="event.stopPropagation()">
             <input type="date" id="currentDate">
-        </div>
-        <br>
-        <div class="inferword">
-            <label for="birthdate">出生日期</label>
-        </div>
-        <div class="datepicker">
-            <input type="date" id="birthdate">
-        </div>
-        <br>
-        <div class="inferword">
-            按任意键进入“生日聚会计划制定日期”的制定环节
         </div>
     </div>
 
     <script>
         function goToNextPage() {
-            var birthdate = new Date(document.getElementById('birthdate').value);
+            var birthdate = new Date(localStorage.getItem('selectedBirthday'));
             var today = new Date(document.getElementById('currentDate').value);
+            console.log(birthdate)
+            console.log(today)
             var nextBirthday = new Date(today.getFullYear(), birthdate.getMonth(), birthdate.getDate());
             if (nextBirthday < today) {
                 nextBirthday.setFullYear(today.getFullYear() + 1);
@@ -50,13 +96,79 @@
                 window.location.href = "setplanday";
             }
         }
-        document.getElementById('birthdate').addEventListener('click', function(event) {
-            event.stopPropagation();
-        });
+        function loadTableData() {
+            fetch('http://127.0.0.1:5000/api/items')
+            .then(response => response.json())
+            .then(data => {
+                const itemsTableBody = document.querySelector('#itemsTable tbody');
+                itemsTableBody.innerHTML = '';
+                data.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${item.name}</td><td>${item.relation}</td><td>${item.birthday || '未知'}</td>`;
+                    // 为每个人添加一个按钮
+                    const planBtnTd = document.createElement('td');
+                    const planBtn = document.createElement('button');
+                    planBtn.textContent = '制定计划';
+                    planBtn.className = 'plan-btn';
+                    planBtn.onclick = function() {
+                        planBirthday(item.id, planBtn); // 假设每个人物项都有唯一的ID
+                    };
+                    planBtnTd.appendChild(planBtn);
+                    tr.appendChild(planBtnTd);
+                    itemsTableBody.appendChild(tr);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+        }
 
+        function planBirthday(id, btn) {
+            const isSelected = btn.classList.toggle('selected');
+            if (isSelected) {
+                fetch('http://127.0.0.1:5000/api/items')
+                .then(response => response.json())
+                .then(data => {
+                    const selectedItem = data.find(item => item.id == id);
+                    if (selectedItem) {
+                        localStorage.removeItem('selectedBirthday'); // 清除选中用户的生日
+                        localStorage.setItem('selectedBirthday', selectedItem.birthday); // 保存选中用户的生日
+                        updateSelectedUserName();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                localStorage.removeItem('selectedBirthday'); // 清除选中用户的生日
+                updateSelectedUserName();
+            }
+        }
+
+        function updateSelectedUserName() {
+            const selectedId = localStorage.getItem('selectone');
+            if (selectedId) {
+                // 假设你的数据是通过 fetch 获取的，这里直接从已加载的数据中查找
+                fetch('http://127.0.0.1:5000/api/items')
+                .then(response => response.json())
+                .then(data => {
+                    const selectedItem = data.find(item => item.id == selectedId);
+                    if (selectedItem) {
+                        document.getElementById('selectedUserName').textContent = `选中的用户: ${selectedItem.name}`;
+                    } else {
+                        document.getElementById('selectedUserName').textContent = '选中的用户: 无';
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                document.getElementById('selectedUserName').textContent = '选中的用户: 无';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTableData();
+            updateSelectedUserName();
+        });
         document.getElementById('currentDate').addEventListener('click', function(event) {
             event.stopPropagation();
         });
+
     </script>
 </body>
 </html>
