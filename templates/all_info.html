@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <title>生日聚会计划便签</title>
+    <style>
+        input, button {
+            padding: 10px;
+            margin: 5px 0;
+            display: block;
+            width: calc(100% - 22px);
+            box-sizing: border-box;
+        }
+        button {
+            cursor: pointer;
+            font-size: 16px;
+            background-color: rgb(243, 181, 67);
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #f2f2f2; /* 设置表格背景底色 */
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:hover {
+            background-color: #ddd; /* 鼠标悬停时行的背景色 */
+        }
+        /* 可选：为表头（th）设置不同的背景色增强区分度 */
+        th {
+            background-color: rgb(243, 181, 67);
+            color: white;
+        }
+    </style>
+</head>
+<body onclick="goToNextPage()">
+    <h1>录入信息</h1>
+    <form id="addItemForm" onclick="event.stopPropagation()">
+        <input type="text" id="itemName" placeholder="姓名">
+        <input type="text" id="itemRelation" placeholder="关系">
+        <input type="date" id="itemBirthday" placeholder="生日"> <!-- 新增生日输入字段 -->
+        <button type="submit">确认！</button>
+    </form>
+    <h1>亲友列表</h1>
+    <table id="itemsTable" onclick="event.stopPropagation()">
+        <thead>
+            <tr>
+                <th>姓名</th>
+                <th>关系</th>
+                <th>生日</th> <!-- 新增表头 -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 数据行将在这里通过JavaScript动态添加 -->
+        </tbody>
+    </table>
+
+    <script>
+        document.getElementById('addItemForm').onsubmit = function(event) {
+            event.preventDefault();
+
+            const itemName = document.getElementById('itemName').value;
+            const itemRelation = document.getElementById('itemRelation').value;
+            const itemBirthday = document.getElementById('itemBirthday').value; // 获取生日值
+
+            fetch('http://127.0.0.1:5000/api/items', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    name: itemName,
+                    relation: itemRelation,
+                    birthday: itemBirthday // 发送生日数据
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('Item added successfully!');
+                loadTableData();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        };
+
+        function loadTableData() {
+            fetch('http://127.0.0.1:5000/api/items')
+            .then(response => response.json())
+            .then(data => {
+                const itemsTableBody = document.querySelector('#itemsTable tbody');
+                itemsTableBody.innerHTML = '';
+                data.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${item.name}</td><td>${item.relation}</td><td>${item.birthday || '未知'}</td>`; // 显示生日
+                    itemsTableBody.appendChild(tr);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTableData();
+        });
+        function goToNextPage() {
+            window.location.href = "basicinfo";
+        }
+    </script>
+</body>
+</html>
