@@ -130,6 +130,8 @@
                     const selectedItem = data.find(item => item.id == id);
                     if (selectedItem) {
                         localStorage.removeItem('selectedBirthday'); // 清除选中用户的生日
+                        localStorage.removeItem('selectone');
+                        localStorage.setItem('selectone', id);
                         localStorage.setItem('selectedBirthday', selectedItem.birthday); // 保存选中用户的生日
                         updateSelectedUserName();
                     }
@@ -137,6 +139,7 @@
                 .catch(error => console.error('Error:', error));
             } else {
                 localStorage.removeItem('selectedBirthday'); // 清除选中用户的生日
+                localStorage.removeItem('selectone');
                 updateSelectedUserName();
             }
         }
