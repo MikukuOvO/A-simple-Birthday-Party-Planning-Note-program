@@ -9,6 +9,7 @@
 ```
 python==3.7.16
 Flask==3.0.2
+Flask-Cors==4.0.0
 ```
 
 ## 编译 & 运行
@@ -20,6 +21,8 @@ flask run
 ## 文件结构
 
 ```
+-instance/
+	-site.db # 数据库
 -static/
 	-img/
 	-style.css
