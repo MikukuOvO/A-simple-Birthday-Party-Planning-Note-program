@@ -54,6 +54,7 @@
                 <th>姓名</th>
                 <th>关系</th>
                 <th>生日</th> <!-- 新增表头 -->
+                <th>计划日期</th>
             </tr>
         </thead>
         <tbody>
@@ -77,7 +78,8 @@
                 body: JSON.stringify({ 
                     name: itemName,
                     relation: itemRelation,
-                    birthday: itemBirthday // 发送生日数据
+                    birthday: itemBirthday, // 发送生日数据
+                    planday: ''
                 }),
             })
             .then(response => response.json())
@@ -99,7 +101,7 @@
                 itemsTableBody.innerHTML = '';
                 data.forEach(item => {
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${item.name}</td><td>${item.relation}</td><td>${item.birthday || '未知'}</td>`; // 显示生日
+                    tr.innerHTML = `<td>${item.name}</td><td>${item.relation}</td><td>${item.birthday || '未知'}</td><td>${item.planday || '未知'}</td>`; // 显示生日
                     itemsTableBody.appendChild(tr);
                 });
             })

@@ -60,6 +60,7 @@
                 <th>姓名</th>
                 <th>关系</th>
                 <th>生日</th> <!-- 新增表头 -->
+                <th>计划日期</th>
             </tr>
         </thead>
         <tbody>
@@ -104,7 +105,7 @@
                 itemsTableBody.innerHTML = '';
                 data.forEach(item => {
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${item.name}</td><td>${item.relation}</td><td>${item.birthday || '未知'}</td>`;
+                    tr.innerHTML = `<td>${item.name}</td><td>${item.relation}</td><td>${item.birthday || '未知'}</td><td>${item.planday || '未知'}</td>`; // 显示生日
                     // 为每个人添加一个按钮
                     const planBtnTd = document.createElement('td');
                     const planBtn = document.createElement('button');

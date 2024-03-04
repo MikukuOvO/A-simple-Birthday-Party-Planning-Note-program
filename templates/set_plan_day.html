@@ -82,7 +82,26 @@
 
         function confirmIt() {
             localStorage.setItem('daysPrepareNextBirthday', planDate.toISOString());
+            var itemId = parseInt(localStorage.getItem('selectone'));
             document.querySelector('.error-image').style.display = 'none';
+            fetch(`http://127.0.0.1:5000/api/items/${itemId}`, { // 注意这里使用了模板字符串和PUT方法
+                method: 'PUT', // 使用PUT方法来更新
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    planday: planDate.toISOString() // 更新birthday字段
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('Item updated successfully!'); // 提示更新成功
+                loadTableData(); // 可能需要重新加载或更新您的数据显示
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
             window.location.href = "resultdisplay";
         }
         
