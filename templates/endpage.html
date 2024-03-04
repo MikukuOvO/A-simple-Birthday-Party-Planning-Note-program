@@ -1,20 +1,51 @@
 <!-- Author:Zixuan Lu -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <title>生日聚会计划便签</title>
 </head>
-<body onclick="goToNextPage()">
+<body >
     <h1>祝你有个快乐的生日~</h1>
+    <div id="birthdayInfo" class="birthdayinfo"></div>
     <div id="birthdayInfo2" class="birthdayinfo"></div>
+    <div id="birthdayInfo3" class="birthdayinfo"></div>
+    <div id="birthdayInfo4" class="birthdayinfo"></div>
+    <div id="birthdayInfo5" class="birthdayinfo"></div>
+        
     <script>
-        var daysPrepareNextBirthday = new Date(localStorage.getItem('daysPrepareNextBirthday'));
-        var birthdayInfoDiv = document.getElementById("birthdayInfo2");
-        birthdayInfoDiv.innerHTML = "<br>预计准备生日计划的日期: " + daysPrepareNextBirthday.toDateString() + "<br><br><br><br><br><br>按任意键结束 " ;
-        function goToNextPage() {
+        fetch('http://127.0.0.1:5000/api/items')
+        .then(response => response.json())
+        .then(data => {
+            const selectedItem1 = data.find(item => item.id == 1);
+            if (selectedItem1){
+                var birthdayInfoDiv = document.getElementById("birthdayInfo");
+                birthdayInfoDiv.innerHTML = selectedItem1.name +"  ,我的" +selectedItem1.relation + "   生日日期: " + selectedItem1.birthday ;
+            }
+            const selectedItem2 = data.find(item => item.id == 2);
+            if (selectedItem2){
+                var birthdayInfoDiv2 = document.getElementById("birthdayInfo2");
+                birthdayInfoDiv2.innerHTML = selectedItem2.name +"  ,我的" +selectedItem2.relation + "   生日日期: " + selectedItem2.birthday  ;
+            }
+            const selectedItem3 = data.find(item => item.id == 3);
+            if (selectedItem3){
+                var birthdayInfoDiv3 = document.getElementById("birthdayInfo3");
+                birthdayInfoDiv3.innerHTML = selectedItem3.name +"  ,我的" +selectedItem3.relation + "   生日日期: " + selectedItem3.birthday  ;
+            }
+            const selectedItem4 = data.find(item => item.id == 4);
+            if (selectedItem4){
+                var birthdayInfoDiv4 = document.getElementById("birthdayInfo4");
+                birthdayInfoDiv4.innerHTML =  selectedItem4.name +"  ,我的" +selectedItem1.relation + "   生日日期: " + selectedItem1.birthday  ;
+            }
+
+        });
+       
+        
+        
+        function Final() {
             window.location.href = "closepage";
         }
+       
     </script>
 </body>
 </html>
