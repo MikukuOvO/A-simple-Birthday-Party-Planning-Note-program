@@ -98,7 +98,7 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    planday: planDate // 更新birthday字段
+                    planday: planDate.toDateString() // 更新birthday字段
                 }),
             })
             .then(response => response.json())
