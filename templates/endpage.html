@@ -1,52 +1,163 @@
-<!-- Author:Zixuan Lu -->
+<!-- Author:Fenglin Yu -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <title>生日聚会计划便签</title>
-</head>
-<body >
-    <h1>祝你有个快乐的生日~</h1>
-    <div id="birthdayInfo" class="birthdayinfo"></div>
-    <div id="birthdayInfo2" class="birthdayinfo"></div>
-    <div id="birthdayInfo3" class="birthdayinfo"></div>
-    <div id="birthdayInfo4" class="birthdayinfo"></div>
-    <div id="birthdayInfo5" class="birthdayinfo"></div>
-        
-    <script>
-        fetch('http://127.0.0.1:5000/api/items')
-        .then(response => response.json())
-        .then(data => {
-            const selectedItem1 = data.find(item => item.id == 1);
-            if (selectedItem1){
-                var birthdayInfoDiv = document.getElementById("birthdayInfo");
-                birthdayInfoDiv.innerHTML = selectedItem1.name +"  ,我的" +selectedItem1.relation + "   生日日期: " + selectedItem1.birthday ;
-            }
-            const selectedItem2 = data.find(item => item.id == 2);
-            if (selectedItem2){
-                var birthdayInfoDiv2 = document.getElementById("birthdayInfo2");
-                birthdayInfoDiv2.innerHTML = selectedItem2.name +"  ,我的" +selectedItem2.relation + "   生日日期: " + selectedItem2.birthday  ;
-            }
-            const selectedItem3 = data.find(item => item.id == 3);
-            if (selectedItem3){
-                var birthdayInfoDiv3 = document.getElementById("birthdayInfo3");
-                birthdayInfoDiv3.innerHTML = selectedItem3.name +"  ,我的" +selectedItem3.relation + "   生日日期: " + selectedItem3.birthday  ;
-            }
-            const selectedItem4 = data.find(item => item.id == 4);
-            if (selectedItem4){
-                var birthdayInfoDiv4 = document.getElementById("birthdayInfo4");
-                birthdayInfoDiv4.innerHTML =  selectedItem4.name +"  ,我的" +selectedItem1.relation + "   生日日期: " + selectedItem1.birthday  ;
-            }
-
-        });
-       
-        
-        
-        function Final() {
-            window.location.href = "closepage";
+    <style>
+        input, button {
+            padding: 10px;
+            margin: 5px 0;
+            display: block;
+            width: calc(100% - 22px);
+            box-sizing: border-box;
         }
-       
+        button {
+            cursor: pointer;
+            font-size: 16px;
+            background-color: rgb(243, 181, 67);
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #f2f2f2; /* 设置表格背景底色 */
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:hover {
+            background-color: #ddd; /* 鼠标悬停时行的背景色 */
+        }
+        /* 可选：为表头（th）设置不同的背景色增强区分度 */
+        th {
+            background-color: rgb(243, 181, 67);
+            color: white;
+        }
+        .plan-btn {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        /* 选中状态的按钮样式 */
+        .selected {
+            background-color: #f44336;
+        }
+    </style>
+</head>
+<body onclick="goToNextPage()">
+    <h1>祝你有个快乐的生日~</h1>
+    <table id="itemsTable" onclick="event.stopPropagation()">
+        <thead>
+            <tr>
+                <th>姓名</th>
+                <th>关系</th>
+                <th>生日</th> <!-- 新增表头 -->
+                <th>计划日期</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 数据行将在这里通过JavaScript动态添加 -->
+        </tbody>
+    </table>
+ 
+
+    <script>
+        function goToNextPage() {
+            var birthdate = new Date(localStorage.getItem('selectedBirthday'));
+            var today = new Date(document.getElementById('currentDate').value);
+            console.log(birthdate)
+            console.log(today)
+            var nextBirthday = new Date(today.getFullYear(), birthdate.getMonth(), birthdate.getDate());
+            if (nextBirthday < today) {
+                nextBirthday.setFullYear(today.getFullYear() + 1);
+            }
+            var daysUntilBirthday = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
+            if (isNaN(daysUntilBirthday)) {
+                alert("日期没有选好哦～");
+            } else {
+                localStorage.setItem('birthdate', birthdate.toISOString());
+                localStorage.setItem('today', today.toISOString());
+                localStorage.setItem('nextbirthdate', nextBirthday.toISOString());
+                window.location.href = "closepage";
+            }
+        }
+        function loadTableData() {
+            fetch('http://127.0.0.1:5000/api/items')
+            .then(response => response.json())
+            .then(data => {
+                const itemsTableBody = document.querySelector('#itemsTable tbody');
+                itemsTableBody.innerHTML = '';
+                data.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${item.name}</td><td>${item.relation}</td><td>${item.birthday || '未知'}</td><td>${item.planday || '未知'}</td>`; // 显示生日
+                    // 为每个人添加一个按钮
+                   
+                    itemsTableBody.appendChild(tr);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function planBirthday(id, btn) {
+            const isSelected = btn.classList.toggle('selected');
+            if (isSelected) {
+                fetch('http://127.0.0.1:5000/api/items')
+                .then(response => response.json())
+                .then(data => {
+                    const selectedItem = data.find(item => item.id == id);
+                    if (selectedItem) {
+                        localStorage.removeItem('selectedBirthday'); // 清除选中用户的生日
+                        localStorage.removeItem('selectone');
+                        localStorage.setItem('selectone', id);
+                        localStorage.setItem('selectedBirthday', selectedItem.birthday); // 保存选中用户的生日
+                        updateSelectedUserName();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                localStorage.removeItem('selectedBirthday'); // 清除选中用户的生日
+                localStorage.removeItem('selectone');
+                updateSelectedUserName();
+            }
+        }
+
+        function updateSelectedUserName() {
+            const selectedId = localStorage.getItem('selectone');
+            if (selectedId) {
+                // 假设你的数据是通过 fetch 获取的，这里直接从已加载的数据中查找
+                fetch('http://127.0.0.1:5000/api/items')
+                .then(response => response.json())
+                .then(data => {
+                    const selectedItem = data.find(item => item.id == selectedId);
+                    if (selectedItem) {
+                        document.getElementById('selectedUserName').textContent = `选中的用户: ${selectedItem.name}`;
+                    } else {
+                        document.getElementById('selectedUserName').textContent = '选中的用户: 无';
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                document.getElementById('selectedUserName').textContent = '选中的用户: 无';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTableData();
+            updateSelectedUserName();
+        });
+        document.getElementById('currentDate').addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+
     </script>
 </body>
 </html>
-<!-- Author:Zixuan Lu -->
+<!-- Author:Fenglin Yu -->
