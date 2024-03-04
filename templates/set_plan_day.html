@@ -63,7 +63,15 @@
             console.log(planpreday)
             localStorage.setItem('n', planpreday);
             localStorage.setItem('dayst0PrepareNextBirthday', planDate.toISOString());
-            if (planDate && planDate.getDay() !== 0 && planDate.getDay() !== 6) {
+            var month = planDate.getMonth() + 1;
+            if(month==10 && planDate.getDate() < 8){
+                document.querySelector('.error-image').style.display = 'none';
+                document.getElementById('planDateValue2').innerText = '您选择的是这个日期呐：' + planDate.toDateString() + ' ，您确认嘛～'; 
+            } else if(month==5 && planDate.getDate() < 4){
+                document.querySelector('.error-image').style.display = 'none';
+                document.getElementById('planDateValue2').innerText = '您选择的是这个日期呐：' + planDate.toDateString() + ' ，您确认嘛～'; 
+            } else if (planDate && planDate.getDay() !== 0 && planDate.getDay() !== 6) {
+                
                 document.querySelector('.error-image').style.display = 'block';
                 if(planDate.getDay() < 3) {
                     planDate.setDate(planDate.getDate() - planDate.getDay() - 1)
@@ -82,26 +90,7 @@
 
         function confirmIt() {
             localStorage.setItem('daysPrepareNextBirthday', planDate.toISOString());
-            var itemId = parseInt(localStorage.getItem('selectone'));
             document.querySelector('.error-image').style.display = 'none';
-            fetch(`http://127.0.0.1:5000/api/items/${itemId}`, { // 注意这里使用了模板字符串和PUT方法
-                method: 'PUT', // 使用PUT方法来更新
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    planday: planDate.toISOString() // 更新birthday字段
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                alert('Item updated successfully!'); // 提示更新成功
-                loadTableData(); // 可能需要重新加载或更新您的数据显示
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
             window.location.href = "resultdisplay";
         }
         
