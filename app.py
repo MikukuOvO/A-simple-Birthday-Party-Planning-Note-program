@@ -9,8 +9,8 @@ def home():
     return render_template('index.html')
 
 items = [
-    {"id": 1, "name": "小红", "relation": "朋友", "birthday": "1970-01-01", "planday": ""}, 
-    {"id": 2, "name": "小绿", "relation": "朋友", "birthday": "2050-01-01", "planday": ""}
+    # {"id": 1, "name": "小红", "relation": "朋友", "birthday": "1970-01-01", "planday": ""}, 
+    # {"id": 2, "name": "小绿", "relation": "朋友", "birthday": "2050-01-01", "planday": ""}
 ]
 
 @app.route('/api/items', methods=['GET'])
