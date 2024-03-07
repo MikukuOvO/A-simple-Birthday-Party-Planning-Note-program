@@ -78,15 +78,30 @@
     </div>
 
     <script>
+        function isLeapYear(year) {
+            return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+        }
         function goToNextPage() {
             var birthdate = new Date(localStorage.getItem('selectedBirthday'));
             var today = new Date(document.getElementById('currentDate').value);
             console.log(birthdate)
             console.log(today)
-            var nextBirthday = new Date(today.getFullYear(), birthdate.getMonth(), birthdate.getDate());
-            if (nextBirthday < today) {
-                nextBirthday.setFullYear(today.getFullYear() + 1);
+            var nextBirthdayYear = today.getFullYear();
+            if (birthdate.getMonth() < today.getMonth() || 
+                (birthdate.getMonth() === today.getMonth() && birthdate.getDate() < today.getDate())) {
+                // 如果生日已经过去，则考虑下一年
+                nextBirthdayYear++;
             }
+
+            // 特别处理2月29日
+            if (birthdate.getMonth() === 1 && birthdate.getDate() === 29) {
+                // 确保下一个生日年份是闰年
+                while (!isLeapYear(nextBirthdayYear)) {
+                    nextBirthdayYear++;
+                }
+            }
+
+            var nextBirthday = new Date(nextBirthdayYear, birthdate.getMonth(), birthdate.getDate());
             var daysUntilBirthday = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
             if (isNaN(daysUntilBirthday)) {
                 alert("日期没有选好哦～");
