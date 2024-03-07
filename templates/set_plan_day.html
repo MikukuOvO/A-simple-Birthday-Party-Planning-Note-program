@@ -49,10 +49,17 @@
 
         function calculatePlanDate() {
             var planpreday = parseInt(document.getElementById('planpreday').value);
-            var planDate = new Date(nextBirthday.getTime() - planpreday * 24 * 60 * 60 * 1000);
-            var outputDiv = document.getElementById('outputDiv');
-            outputDiv.innerHTML = '计划日期是：' + planDate.toDateString();
-            window.planDate = planDate;
+            if (planpreday > daysUntilNextBirthday) {
+                alert('选择的提前天数大于距下次生日的天数，请重新选择！');
+                var outputDiv = document.getElementById('outputDiv');
+                outputDiv.innerHTML = '选择的天数不合适，请重新输入！';
+                window.planDate = undefined; // 确保不满足条件时，planDate不会被设置
+            } else {
+                var planDate = new Date(nextBirthday.getTime() - planpreday * 24 * 60 * 60 * 1000);
+                var outputDiv = document.getElementById('outputDiv');
+                outputDiv.innerHTML = '计划日期是：' + planDate.toDateString();
+                window.planDate = planDate;
+            }
         }
 
         function checkDate() {
@@ -74,13 +81,49 @@
                 
                 document.querySelector('.error-image').style.display = 'block';
                 if(planDate.getDay() < 3) {
-                    planDate.setDate(planDate.getDate() - planDate.getDay() - 1)
+                    var res1 = new Date(planDate.getTime())
+                    res1.setDate(planDate.getDate() - planDate.getDay() - 1)
+                    if (res1 < today || res1 > nextBirthday) {
+                        var res2 = new Date(planDate.getTime())
+                        res2.setDate(planDate.getDate() - planDate.getDay() + 6)
+                        if (res2 < today || res2 > nextBirthday) {
+                            document.getElementById('planDateValue1').innerText = '由于调整后会不合法～ '
+                            document.getElementById('planDateValue2').innerText = '这边就不进行调整啦：' + planDate.toDateString() + ' ，您看可以嘛～';
+                        }
+                        else {
+                            document.getElementById('planDateValue1').innerText = '这可是工作日，是要上班的呐～ '
+                            document.getElementById('planDateValue2').innerText = '这边帮您改成最近的周六啦：' + res2.toDateString() + ' ，您看可以嘛～';
+                        }
+                    }
+                    else {
+                        document.getElementById('planDateValue1').innerText = '这可是工作日，是要上班的呐～ '
+                        document.getElementById('planDateValue2').innerText = '这边帮您改成最近的周六啦：' + res1.toDateString() + ' ，您看可以嘛～';
+                    }
                 }
                 else {
-                    planDate.setDate(planDate.getDate() - planDate.getDay() + 6)
+                    var res1 = new Date(planDate.getTime())
+                    res1.setDate(planDate.getDate() - planDate.getDay() - 1)
+                    if (res1 < today || res1 > nextBirthday) {
+                        var res2 = new Date(planDate.getTime())
+                        res2.setDate(planDate.getDate() - planDate.getDay() + 6)
+                        console.log(res2)
+                        console.log(today)
+                        console.log(nextBirthday)
+                        if (res2 < today || res2 > nextBirthday) {
+                            document.getElementById('planDateValue1').innerText = '由于调整后会不合法～ '
+                            document.getElementById('planDateValue2').innerText = '这边就不进行调整啦：' + planDate.toDateString() + ' ，您看可以嘛～';
+                        }
+                        else {
+                            document.getElementById('planDateValue1').innerText = '这可是工作日，是要上班的呐～ '
+                            document.getElementById('planDateValue2').innerText = '这边帮您改成最近的周六啦：' + res2.toDateString() + ' ，您看可以嘛～';
+                        }
+                    }
+                    else {
+                        document.getElementById('planDateValue1').innerText = '这可是工作日，是要上班的呐～ '
+                        document.getElementById('planDateValue2').innerText = '这边帮您改成最近的周六啦：' + res1.toDateString() + ' ，您看可以嘛～';
+                    }
                 }
-                document.getElementById('planDateValue1').innerText = '这可是工作日，是要上班的呐～ '
-                document.getElementById('planDateValue2').innerText = '这边帮您改成最近的周六啦：' + planDate.toDateString() + ' ，您看可以嘛～';
+                
             } else {
                 document.querySelector('.error-image').style.display = 'none';
                 document.getElementById('planDateValue2').innerText = '您选择的是这个日期呐：' + planDate.toDateString() + ' ，您确认嘛～';
